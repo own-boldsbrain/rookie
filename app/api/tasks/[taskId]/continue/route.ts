@@ -162,7 +162,7 @@ async function continueTask(
     // Try to reconnect to existing sandbox if keepAlive was enabled
     console.log('Checking for existing sandbox:', {
       hasSandboxId: !!currentTask.sandboxId,
-      sandboxId: currentTask.sandboxId,
+      name: currentTask.sandboxId,
       keepAlive: currentTask.keepAlive,
     })
 
@@ -171,7 +171,7 @@ async function continueTask(
         await logger.info('Attempting to reconnect to existing sandbox')
         console.log('Calling Sandbox.get with sandboxId:', currentTask.sandboxId)
         const reconnectedSandbox = await Sandbox.get({
-          sandboxId: currentTask.sandboxId,
+          name: currentTask.sandboxId,
           teamId: process.env.SANDBOX_VERCEL_TEAM_ID!,
           projectId: process.env.SANDBOX_VERCEL_PROJECT_ID!,
           token: process.env.SANDBOX_VERCEL_TOKEN!,
@@ -235,7 +235,7 @@ async function continueTask(
       await db
         .update(tasks)
         .set({
-          sandboxId: sandbox?.sandboxId || undefined,
+          sandboxId: sandbox?.name || undefined,
           sandboxUrl: domain || undefined,
           updatedAt: new Date(),
         })

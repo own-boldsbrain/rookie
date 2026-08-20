@@ -58,6 +58,44 @@ interface DeploymentInfo {
   createdAt?: string
 }
 
+const markdownComponents = {
+  code: ({ className, children, ...props }: any) => (
+    <code className={`${className} !text-xs`} {...props}>
+      {children}
+    </code>
+  ),
+  pre: ({ children, ...props }: any) => (
+    <pre className="!text-xs" {...props}>
+      {children}
+    </pre>
+  ),
+  p: ({ children, ...props }: any) => (
+    <p className="text-xs" {...props}>
+      {children}
+    </p>
+  ),
+  a: ({ children, href, ...props }: any) => (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline" {...props}>
+      {children}
+    </a>
+  ),
+  ul: ({ children, ...props }: any) => (
+    <ul className="text-xs list-disc ml-4" {...props}>
+      {children}
+    </ul>
+  ),
+  ol: ({ children, ...props }: any) => (
+    <ol className="text-xs list-decimal ml-4" {...props}>
+      {children}
+    </ol>
+  ),
+  li: ({ children, ...props }: any) => (
+    <li className="text-xs mb-2" {...props}>
+      {Children.toArray(children).filter((c) => typeof c === 'string' || isValidElement(c))}
+    </li>
+  ),
+}
+
 export function TaskChat({ taskId, task }: TaskChatProps) {
   const [messages, setMessages] = useState<TaskMessage[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -776,53 +814,7 @@ export function TaskChat({ taskId, task }: TaskChatProps) {
                         </span>
                       </div>
                       <div className="text-xs text-foreground">
-                        <Streamdown
-                          components={{
-                            code: ({ className, children, ...props }: React.ComponentPropsWithoutRef<'code'>) => (
-                              <code className={`${className} !text-xs`} {...props}>
-                                {children}
-                              </code>
-                            ),
-                            pre: ({ children, ...props }: React.ComponentPropsWithoutRef<'pre'>) => (
-                              <pre className="!text-xs" {...props}>
-                                {children}
-                              </pre>
-                            ),
-                            p: ({ children, ...props }: React.ComponentPropsWithoutRef<'p'>) => (
-                              <p className="text-xs" {...props}>
-                                {children}
-                              </p>
-                            ),
-                            a: ({ children, href, ...props }: React.ComponentPropsWithoutRef<'a'>) => (
-                              <a
-                                href={href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary hover:underline"
-                                {...props}
-                              >
-                                {children}
-                              </a>
-                            ),
-                            ul: ({ children, ...props }: React.ComponentPropsWithoutRef<'ul'>) => (
-                              <ul className="text-xs list-disc ml-4" {...props}>
-                                {children}
-                              </ul>
-                            ),
-                            ol: ({ children, ...props }: React.ComponentPropsWithoutRef<'ol'>) => (
-                              <ol className="text-xs list-decimal ml-4" {...props}>
-                                {children}
-                              </ol>
-                            ),
-                            li: ({ children, ...props }: React.ComponentPropsWithoutRef<'li'>) => (
-                              <li className="text-xs mb-2" {...props}>
-                                {Children.toArray(children).filter((c) => typeof c === 'string' || isValidElement(c))}
-                              </li>
-                            ),
-                          }}
-                        >
-                          {comment.body}
-                        </Streamdown>
+                        <Streamdown components={markdownComponents}>{comment.body}</Streamdown>
                       </div>
                     </div>
                     <DropdownMenu>
@@ -910,42 +902,7 @@ export function TaskChat({ taskId, task }: TaskChatProps) {
                     className="relative max-h-[72px] overflow-hidden"
                   >
                     <div className="text-xs">
-                      <Streamdown
-                        components={{
-                          code: ({ className, children, ...props }: React.ComponentPropsWithoutRef<'code'>) => (
-                            <code className={`${className} !text-xs`} {...props}>
-                              {children}
-                            </code>
-                          ),
-                          pre: ({ children, ...props }: React.ComponentPropsWithoutRef<'pre'>) => (
-                            <pre className="!text-xs" {...props}>
-                              {children}
-                            </pre>
-                          ),
-                          p: ({ children, ...props }: React.ComponentPropsWithoutRef<'p'>) => (
-                            <p className="text-xs" {...props}>
-                              {children}
-                            </p>
-                          ),
-                          ul: ({ children, ...props }: React.ComponentPropsWithoutRef<'ul'>) => (
-                            <ul className="text-xs list-disc ml-4" {...props}>
-                              {children}
-                            </ul>
-                          ),
-                          ol: ({ children, ...props }: React.ComponentPropsWithoutRef<'ol'>) => (
-                            <ol className="text-xs list-decimal ml-4" {...props}>
-                              {children}
-                            </ol>
-                          ),
-                          li: ({ children, ...props }: React.ComponentPropsWithoutRef<'li'>) => (
-                            <li className="text-xs mb-2" {...props}>
-                              {Children.toArray(children).filter((c) => typeof c === 'string' || isValidElement(c))}
-                            </li>
-                          ),
-                        }}
-                      >
-                        {group.userMessage.content}
-                      </Streamdown>
+                      <Streamdown components={markdownComponents}>{group.userMessage.content}</Streamdown>
                     </div>
                     {overflowingMessages.has(group.userMessage.id) && (
                       <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-card to-transparent pointer-events-none" />
@@ -1038,17 +995,17 @@ export function TaskChat({ taskId, task }: TaskChatProps) {
                             return (
                               <Streamdown
                                 components={{
-                                  code: ({ className, children, ...props }: React.ComponentPropsWithoutRef<'code'>) => (
+                                  code: ({ className, children, ...props }: any) => (
                                     <code className={`${className} !text-xs`} {...props}>
                                       {children}
                                     </code>
                                   ),
-                                  pre: ({ children, ...props }: React.ComponentPropsWithoutRef<'pre'>) => (
+                                  pre: ({ children, ...props }: any) => (
                                     <pre className="!text-xs" {...props}>
                                       {children}
                                     </pre>
                                   ),
-                                  p: ({ children, ...props }: React.ComponentPropsWithoutRef<'p'>) => {
+                                  p: ({ children, ...props }: any) => {
                                     // Extract text from complex children structures
                                     const childrenArray = Children.toArray(children)
                                     const textParts: string[] = []
@@ -1098,17 +1055,17 @@ export function TaskChat({ taskId, task }: TaskChatProps) {
                                       </p>
                                     )
                                   },
-                                  ul: ({ children, ...props }: React.ComponentPropsWithoutRef<'ul'>) => (
+                                  ul: ({ children, ...props }: any) => (
                                     <ul className="text-xs list-disc ml-4" {...props}>
                                       {children}
                                     </ul>
                                   ),
-                                  ol: ({ children, ...props }: React.ComponentPropsWithoutRef<'ol'>) => (
+                                  ol: ({ children, ...props }: any) => (
                                     <ol className="text-xs list-decimal ml-4" {...props}>
                                       {children}
                                     </ol>
                                   ),
-                                  li: ({ children, ...props }: React.ComponentPropsWithoutRef<'li'>) => (
+                                  li: ({ children, ...props }: any) => (
                                     <li className="text-xs mb-2" {...props}>
                                       {Children.toArray(children).filter(
                                         (c) => typeof c === 'string' || isValidElement(c),
